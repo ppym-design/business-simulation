@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プレシャスパートナーズ 経営シミュレーションサイト</title>
+
+  <style>
+    :root {
+      --blue: #1d4ed8;
+      --blue-dark: #0f2f6b;
+      --blue-soft: #eff6ff;
+      --sky: #f8fbff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --border: #dbeafe;
+      --card: #ffffff;
+      --green: #16a34a;
+      --orange: #f97316;
+      --red: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--text);
+      background: #ffffff;
+      line-height: 1.8;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f2f6b 0%, #1d4ed8 58%, #60a5fa 100%);
+      color: #ffffff;
+      padding: 64px 20px 74px;
+    }
+
+    .hero-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .site-label {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.25;
+      letter-spacing: 0.03em;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.94;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+      transition: 0.18s ease;
+    }
+
+    .btn-main {
+      background: #ffffff;
+      color: var(--blue);
+    }
+
+    .btn-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.2);
+    }
+
+    .btn-sub {
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn-sub:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px 72px;
+    }
+
+    .main-panel {
+      margin-top: -42px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 28px;
+      box-shadow: 0 22px 52px rgba(30, 64, 175, 0.16);
+    }
+
+    .main-panel-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .main-panel h2 {
+      margin: 0 0 10px;
+      font-size: 27px;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+
+    .main-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .simulation-card {
+      background: linear-gradient(180deg, #f8fbff, #ffffff);
+      border: 1px solid #bfdbfe;
+      border-radius: 22px;
+      padding: 22px;
+    }
+
+    .simulation-card .badge {
+      display: inline-block;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-bottom: 12px;
+    }
+
+    .simulation-card h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      color: #0f172a;
+    }
+
+    .simulation-card ul {
+      margin: 14px 0 18px;
+      padding-left: 20px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .simulation-card a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    section {
+      margin-top: 48px;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      color: #0f172a;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid #e5efff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+    }
+
+    .step-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .step h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .tool-card {
+      background: var(--card);
+      border: 1px solid #e5efff;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #111827;
+    }
+
+    .tool-card p {
+      margin: 0 0 16px;
+      color: #4b5563;
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .tool-card a,
+    .tool-card span.link-disabled {
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .tool-card a {
+      color: var(--blue);
+    }
+
+    .link-disabled {
+      color: #94a3b8;
+    }
+
+    .tag {
+      width: fit-content;
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      border: 1px solid #bfdbfe;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tag.green {
+      background: #ecfdf5;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+
+    .tag.orange {
+      background: #fff7ed;
+      color: #c2410c;
+      border-color: #fed7aa;
+    }
+
+    .info-box {
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .info-box h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer {
+      background: #f8fafc;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      padding: 26px 20px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .main-panel-grid,
+      .steps,
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 46px 16px 74px;
+      }
+
+      .container {
+        padding: 0 14px 58px;
+      }
+
+      .main-panel {
+        padding: 22px;
+      }
+
+      .main-panel-grid,
+      .steps,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="site-label">Precious Partners Business Simulation</div>
+      <h1>経営判断を、数字で体験する。</h1>
+      <p>
+        資本金・借入・人員・投資方針を選択すると、売上・利益・資金残高がどのように変化するかを確認できます。
+        お客様との会話や事業計画の入口として使える、体験型の経営シミュレーションサイトです。
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-main" href="business-game.html">シミュレーションを始める</a>
+        <a class="btn btn-sub" href="#flow">使い方を見る</a>
+        <a class="btn btn-sub" href="#tools">補助ツールを見る</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="main-panel">
+      <div class="main-panel-grid">
+        <div>
+          <h2>会社経営をゲーム感覚で試算できます</h2>
+          <p>
+            広告費を増やす、人を採用する、設備投資をする、借入を利用する。
+            その判断が、利益や資金繰りにどう影響するかを簡単に確認できます。
+            まずは大まかな条件を選ぶだけで、12か月後の姿をシミュレーションします。
+          </p>
+        </div>
+
+        <div class="simulation-card">
+          <span class="badge">メインコンテンツ</span>
+          <h3>経営判断体験シミュレーター</h3>
+          <p>初期条件と経営方針を選ぶと、12か月後の売上・利益・現金残高を表示します。</p>
+          <ul>
+            <li>業種・資本金・借入を選択</li>
+            <li>広告・採用・設備投資の方針を設定</li>
+            <li>黒字化や資金ショートの可能性を確認</li>
+          </ul>
+          <a href="business-game.html">開始する →</a>
+        </div>
+      </div>
+    </div>
+
+    <section id="flow">
+      <div class="section-head">
+        <h2>使い方</h2>
+        <p>専門的な会計知識がなくても、順番に選ぶだけで試算できます。</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>事業条件を選ぶ</h3>
+          <p>業種、資本金、借入、従業員数など、会社の前提条件を設定します。</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>経営方針を決める</h3>
+          <p>広告重視、採用重視、設備投資重視など、事業展開の方向性を選びます。</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>数字を確認する</h3>
+          <p>売上、粗利益、固定費、返済額、現金残高の変化を確認します。</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>次の打ち手を考える</h3>
+          <p>黒字化・資金繰り・採用・投資判断について、会話のきっかけを作ります。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>想定している相談場面</h2>
+        <p>創業相談、事業拡大、採用判断、設備投資、資金繰り確認などに使えます。</p>
+      </div>
+
+      <div class="grid">
+        <div class="tool-card">
+          <span class="tag">創業</span>
+          <h3>開業前の資金計画</h3>
+          <p>資本金と借入で、初期投資や運転資金が足りるかを確認する入口として使えます。</p>
+          <span class="link-disabled">シミュレーター内で確認</span>
+        </div>
+
+        <div class="tool-card">
+          <span class="tag green">成長</span>
+          <h3>採用・人件費の判断</h3>
+          <p>従業員を増やした場合に、売上や固定費、利益にどのような影響があるかを確認します。</p>
+          <span class="link-disabled">シミュレーター内で確認</span>
+        </div>
+
+        <div class="tool-card">
+          <span class="tag orange">投資</span>
+          <h3>広告費・設備投資の検討</h3>
+          <p>広告費や設備投資を増やした場合、現金残高や利益にどのような影響が出るかを見ます。</p>
+          <span class="link-disabled">シミュレーター内で確認</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools">
+      <div class="section-head">
+        <h2>補助ツール</h2>
+        <p>より詳しく数字を確認したい場合に使う補助ツールです。</p>
+      </div>
+
+      <div class="grid">
+        <div class="tool-card">
+          <span class="tag">PL</span>
+          <h3>変動損益計算ツール</h3>
+          <p>売上高・限界利益率・固定費から、利益と損益分岐点を確認します。</p>
+          <a href="variable-pl.html">開く →</a>
+        </div>
+
+        <div class="tool-card">
+          <span class="tag">売上換算</span>
+          <h3>必要売上計算ツール</h3>
+          <p>支出額を回収するために必要な売上高を、限界利益率から逆算します。</p>
+          <a href="sales-convert.html">開く →</a>
+        </div>
+
+        <div class="tool-card">
+          <span class="tag">準備中</span>
+          <h3>資金繰り耐久チェック</h3>
+          <p>現預金と固定費から、何か月程度資金がもつかを簡易確認します。</p>
+          <span class="link-disabled">準備中</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="info-box">
+        <h3>ご利用にあたって</h3>
+        <p>
+          このサイトの計算結果は、経営判断の入口として使う簡易シミュレーションです。
+          実際の事業計画、資金繰り、税務判断、融資判断については、個別の状況に応じた確認が必要です。
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    © 2026 Precious Partners Business Simulation
+  </footer>
+</body>
+</html>
